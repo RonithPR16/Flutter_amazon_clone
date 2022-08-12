@@ -7,7 +7,9 @@ import 'package:amazon_clone/providers/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import '../../common/widget/snackbar.dart';
 import '../../constants/global_variables.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:intl/intl.dart';
@@ -34,6 +36,26 @@ class _CartScreenState extends State<CartScreen> {
   Future refresh() {
     return getCart(context);
   }
+
+  // void requestMicroPhonePermission() async {
+  //   var status = await Permission.microphone.status;
+  //   print("line 40 ${status}");
+  //   if (status == PermissionStatus.granted) {
+  //     showSnackBar(context, "Microphone permission  granted", true);
+  //   } else if (status == PermissionStatus.denied) {
+  //     await Permission.microphone.request();
+  //     print(status);
+  //     if (status == PermissionStatus.granted) {
+  //       showSnackBar(context, "Microphone permission  granted", false);
+  //     } else if (status == PermissionStatus.denied) {
+  //       showSnackBar(context, "Microphone permission  denied", false);
+  //     } else if (status == PermissionStatus.permanentlyDenied) {
+  //       await openAppSettings();
+  //     }
+  //   } else {
+  //     await openAppSettings();
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +96,9 @@ class _CartScreenState extends State<CartScreen> {
         ),
         actions: [
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              requestMicroPhonePermission(context);
+            },
             child: Container(
               margin: EdgeInsets.only(right: 20),
               child: Icon(

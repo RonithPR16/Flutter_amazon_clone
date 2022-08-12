@@ -1,10 +1,13 @@
-// ignore_for_file: prefer_const_constructors
-
+// import 'package:amazon_clone/common/widget/snackbar.dart';
 import 'package:amazon_clone/features/services/auth_service.dart';
 import 'package:amazon_clone/providers/state.dart';
+// import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
+// import 'package:flutter/src/foundation/key.dart';
+// import 'package:flutter/src/widgets/framework.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:badges/badges.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,6 +30,9 @@ class _HomePageState extends State<HomePage> {
     });
     Future.delayed(Duration.zero).then((value) {
       getCart(context);
+    });
+    Future.delayed(Duration.zero).then((value) {
+      requestMicroPhonePermission(context);
     });
   }
 
@@ -72,14 +78,7 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 Navigator.pushNamed(context, "/cart-screen");
               },
-              child:
-                  //  provider.cartItems.length == 0
-                  //     ? Icon(
-                  //         Icons.shopping_cart,
-                  //         size: 30,
-                  //       )
-                  //     :
-                  Badge(
+              child: Badge(
                 child: Icon(
                   Icons.shopping_cart,
                   size: 30,

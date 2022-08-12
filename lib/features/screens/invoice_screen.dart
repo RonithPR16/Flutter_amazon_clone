@@ -4,11 +4,30 @@ import 'package:amazon_clone/common/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:lottie/lottie.dart';
+
+import '../../main.dart';
 
 class InvoiceScreen extends StatelessWidget {
   static const String routeName = '/invoice-screen';
   const InvoiceScreen({Key? key}) : super(key: key);
+
+  void sendNotification(context) {
+    flutterLocalNotificationsPlugin.show(
+      0,
+      "Amazon",
+      "Your order has been placed successfully",
+      NotificationDetails(
+        android: AndroidNotificationDetails(channel.id, channel.name,
+            channelDescription: channel.description,
+            color: Colors.blue,
+            playSound: true,
+            icon: '@mipmap/ic_launcher'),
+      ),
+    );
+    Navigator.pushReplacementNamed(context, "/home-screen");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +39,6 @@ class InvoiceScreen extends StatelessWidget {
             style: TextStyle(color: Colors.black),
           ),
         ),
-        // backgroundColor: Colors.red,
         body: Container(
             height: 300,
             child: Column(
@@ -86,7 +104,7 @@ class InvoiceScreen extends StatelessWidget {
                     CustomButton(
                       text: "Continue shopping",
                       onTap: () {
-                        Navigator.pushReplacementNamed(context, "/home-screen");
+                        sendNotification(context);
                       },
                     )
                   ],

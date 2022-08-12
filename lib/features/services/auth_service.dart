@@ -9,6 +9,7 @@ import 'package:amazon_clone/models/signedinUser.dart';
 import 'package:amazon_clone/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -226,5 +227,30 @@ deleteCartItem(id, quantity, context) async {
     }
   } catch (e) {
     print(e);
+  }
+}
+
+void requestMicroPhonePermission(context) async {
+  print("called");
+  var status = await Permission.microphone.status;
+
+  if (status.isGranted) {
+    showSnackBar(context, "Microphone permission  granted", true);
+    print("here");
+    print("micrpophone permission granted");
+  } else if (status.isDenied) {
+    var res = await Permission.microphone.request();
+
+    if (await Permission.microphone.request().isGranted) {
+      print("permission is granted at 2nd level");
+      showSnackBar(context, "Microphone permission  granted", true);
+    }
+    if (Platform.isAndroid) {
+      if (res == PermissionStatus.permanentlyDenied) {
+        openAppSettings();
+      }
+    }
+  } else {
+    openAppSettings();
   }
 }
