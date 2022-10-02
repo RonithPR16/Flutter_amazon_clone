@@ -14,6 +14,11 @@ class NoItemsInCart extends StatelessWidget {
         children: [
           Text("No items in cart"),
           Text("Browse items"),
+          ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, "/home-screen");
+              },
+              child: Text("Browser"))
         ],
       ),
     );

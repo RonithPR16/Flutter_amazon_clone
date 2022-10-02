@@ -1,29 +1,34 @@
-// import 'package:amazon_clone/common/widget/snackbar.dart';
+import 'dart:async';
+import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:amazon_clone/features/services/auth_service.dart';
 import 'package:amazon_clone/providers/state.dart';
-// import 'package:firebase_core/firebase_core.dart';
-// import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter/src/foundation/key.dart';
-// import 'package:flutter/src/widgets/framework.dart';
-// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-// import 'package:permission_handler/permission_handler.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
 import 'package:badges/badges.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../authentication.dart';
 import '../../common/widget/allproducts.dart';
 import '../../common/widget/sponsored.dart';
 
 class HomePage extends StatefulWidget {
   static const String routeName = '/home-screen';
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  late StreamSubscription subscription;
+  bool isDeviceConnected = false;
+  bool isAlertSet = false;
+
   @override
   void initState() {
-    super.initState();
+    getConnectivity();
     Future.delayed(Duration.zero).then((value) {
       print("get data called");
       getData(context);
@@ -34,11 +39,33 @@ class _HomePageState extends State<HomePage> {
     Future.delayed(Duration.zero).then((value) {
       requestMicroPhonePermission(context);
     });
+    super.initState();
+  }
+
+  getConnectivity() {
+    print("connectivity called");
+    subscription = Connectivity().onConnectivityChanged.listen(
+      (ConnectivityResult result) async {
+        isDeviceConnected = await InternetConnectionChecker().hasConnection;
+        print("is internet connected---> $isDeviceConnected");
+        if (!isDeviceConnected && isAlertSet == false) {
+          showDialogBox();
+          setState(() => isAlertSet = true);
+        }
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     AppState provider = Provider.of<AppState>(context);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.grey[200],
@@ -53,7 +80,7 @@ class _HomePageState extends State<HomePage> {
                 content: const Text('Are you sure you want to log out?'),
                 actions: <Widget>[
                   TextButton(
-                    onPressed: () => Navigator.pop(context, 'No'),
+                    onPressed: () => Navigator.pop(context),
                     child: const Text('No'),
                   ),
                   TextButton(
@@ -119,7 +146,7 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "SAYARO Shop & services.",
+                    "Amazon Shopping & services.",
                     style: TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 30,
@@ -173,4 +200,54 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  showDialogBox() => Platform.isAndroid
+      ? showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('No Connection'),
+            content: const Text('Please check your internet connectivity'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () async {
+                  Navigator.pop(context, 'Cancel');
+                  setState(() => isAlertSet = false);
+                  // getData(context);
+                  // getCart(context);
+                  isDeviceConnected =
+                      await InternetConnectionChecker().hasConnection;
+                  if (!isDeviceConnected && isAlertSet == false) {
+                    showDialogBox();
+                    setState(() => isAlertSet = true);
+                  }
+                },
+                child: const Text('Retry'),
+              ),
+            ],
+          ),
+        )
+      : showCupertinoDialog<String>(
+          context: context,
+          builder: (BuildContext context) => CupertinoAlertDialog(
+            title: const Text('No Connection'),
+            content: const Text('Please check your internet connectivity'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () async {
+                  Navigator.pop(context, 'Cancel');
+                  setState(() => isAlertSet = false);
+                  // getData(context);
+                  // getCart(context);
+                  isDeviceConnected =
+                      await InternetConnectionChecker().hasConnection;
+                  if (!isDeviceConnected && isAlertSet == false) {
+                    showDialogBox();
+                    setState(() => isAlertSet = true);
+                  }
+                },
+                child: const Text('Retry'),
+              ),
+            ],
+          ),
+        );
 }

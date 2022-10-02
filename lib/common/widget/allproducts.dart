@@ -30,8 +30,6 @@ class AllProducts extends StatelessWidget {
                     width: 160,
                     height: 180,
                   ),
-                  //   ],
-                  // ),
                 ),
               );
             },

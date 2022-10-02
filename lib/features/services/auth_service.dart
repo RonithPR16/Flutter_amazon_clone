@@ -136,11 +136,11 @@ addToCart(id, context) async {
 }
 
 getCart(context) async {
+  print("getCart called");
   List<CartModal> cartProduct = [];
   AppState provider = Provider.of<AppState>(context, listen: false);
   String? token = provider.localToken;
   print("here it is,$token");
-  print("getCart called");
   try {
     print("getCart called");
 
@@ -153,14 +153,20 @@ getCart(context) async {
       print(jsonDecode(response.body)["activeProducts"]);
       // print(jsonDecode(response.body)["activeProducts"].length);
       List<dynamic> data = jsonDecode(response.body)["activeProducts"];
+      print('test');
       data.forEach((element) {
         CartModal item = CartModal.fromJson(element);
         cartProduct.add(item);
         provider.getCartProduct(cartProduct);
-        provider.loading = false;
       });
+      if (data.length == 0) {
+        provider.getCartProduct([]);
+      }
     }
   } catch (e) {}
+  provider.loading = false;
+
+  print(" this is loading${provider.loading}");
 }
 
 increaseCartItem(id, quantity, context) async {
@@ -233,11 +239,8 @@ deleteCartItem(id, quantity, context) async {
 void requestMicroPhonePermission(context) async {
   print("called");
   var status = await Permission.microphone.status;
-
+  print(status);
   if (status.isGranted) {
-    showSnackBar(context, "Microphone permission  granted", true);
-    print("here");
-    print("micrpophone permission granted");
   } else if (status.isDenied) {
     var res = await Permission.microphone.request();
 

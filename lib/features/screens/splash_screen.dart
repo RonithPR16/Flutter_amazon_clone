@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:amazon_clone/features/screens/homepage.dart';
 import 'package:amazon_clone/providers/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -21,8 +22,8 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     AppState provider = Provider.of<AppState>(context, listen: false);
-
-    Timer(Duration(milliseconds: 1500), () {
+    Future.delayed(Duration(milliseconds: 1500)).then((value) {
+      // Timer(Duration(milliseconds: 1500), () {
       provider.localToken == null
           ? Navigator.pushReplacementNamed(context, '/auth-screen')
           : Navigator.pushReplacementNamed(context, '/home-screen');
@@ -32,20 +33,19 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-          gradient: LinearGradient(
-              end: Alignment.topRight,
-              begin: Alignment.bottomRight,
-              colors: [Colors.purple.shade50, Colors.orange])),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Center(
-          child: Container(
-            child: Image.network(
-                "https://pngimg.com/uploads/amazon/amazon_PNG21.png"),
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                end: Alignment.topRight,
+                begin: Alignment.bottomRight,
+                colors: [Colors.purple.shade50, Colors.orange])),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Center(
+            child: Container(
+              child: Image.network(
+                  "https://pngimg.com/uploads/amazon/amazon_PNG21.png"),
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }

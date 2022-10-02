@@ -213,6 +213,9 @@ class _ProductDetailState extends State<ProductDetail> {
                                                       }
                                                     : null),
                                       ),
+                                      SizedBox(
+                                        height: 30,
+                                      )
                                     ],
                                   ),
                                 )

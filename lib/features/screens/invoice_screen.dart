@@ -1,11 +1,17 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:io';
+
 import 'package:amazon_clone/common/widget/custom_button.dart';
+import 'package:amazon_clone/features/screens/downloading_dialog.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:lottie/lottie.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../main.dart';
 
@@ -19,11 +25,14 @@ class InvoiceScreen extends StatelessWidget {
       "Amazon",
       "Your order has been placed successfully",
       NotificationDetails(
-        android: AndroidNotificationDetails(channel.id, channel.name,
-            channelDescription: channel.description,
-            color: Colors.blue,
-            playSound: true,
-            icon: '@mipmap/ic_launcher'),
+        android: AndroidNotificationDetails(
+          channel.id,
+          channel.name,
+          channelDescription: channel.description,
+          color: Colors.blue,
+          playSound: true,
+          icon: '@mipmap/ic_launcher',
+        ),
       ),
     );
     Navigator.pushReplacementNamed(context, "/home-screen");
@@ -40,24 +49,30 @@ class InvoiceScreen extends StatelessWidget {
           ),
         ),
         body: Container(
-            height: 300,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Center(
-                  child: Text(
-                    "Thank you!",
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 24),
-                  ),
+          height: 300,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: Text(
+                  "Thank you!",
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 24),
                 ),
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        primary: Colors.orange.shade300),
-                    child: Text("Download invoice"),
-                    onPressed: () {})
-              ],
-            )),
-        // ),
+              ),
+              ElevatedButton(
+                style:
+                    ElevatedButton.styleFrom(primary: Colors.orange.shade300),
+                child: Text("Download invoice"),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => const DownloadingDialog(),
+                  );
+                },
+              )
+            ],
+          ),
+        ),
         bottomSheet: ClipRRect(
           borderRadius: const BorderRadius.only(
             topRight: Radius.circular(40),

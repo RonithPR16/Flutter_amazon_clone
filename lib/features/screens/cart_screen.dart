@@ -129,8 +129,9 @@ class _CartScreenState extends State<CartScreen> {
                 ],
               ),
             ),
-            // provider.loading
-            provider.cartItems.isEmpty
+            provider.loading
+
+                // provider.cartItems.isEmpty
                 ? Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: ListView.separated(
@@ -204,158 +205,165 @@ class _CartScreenState extends State<CartScreen> {
                           );
                         }),
                   )
-                // : provider.cartItems.length < 0
-                //     ? NoItemsInCart()
-                : ListView.separated(
-                    separatorBuilder: (context, index) => Divider(),
-                    shrinkWrap: true,
-                    physics: ScrollPhysics(),
-                    itemCount: provider.cartItems.length,
-                    itemBuilder: ((context, index) {
-                      return Slidable(
-                        key: UniqueKey(),
-                        startActionPane: ActionPane(
-                            dismissible: DismissiblePane(
-                              onDismissed: () {
-                                deleteCartItem(
-                                    provider.cartItems[index].productId.id,
-                                    provider.cartItems[index].quantity,
-                                    context);
-                              },
-                            ),
-                            motion: const DrawerMotion(),
-                            children: [
-                              SlidableAction(
-                                label: "Delete",
-                                icon: Icons.delete,
-                                backgroundColor: Colors.red,
-                                onPressed: (ctx) {
-                                  deleteCartItem(
-                                      provider.cartItems[index].productId.id,
-                                      provider.cartItems[index].quantity,
-                                      context);
-                                },
-                              ),
-                              // SlidableAction(
-                              //   label: "Share",
-                              //   icon: Icons.share,
-                              //   backgroundColor: Colors.blue,
-                              //   onPressed: (context) {},
-                              // )
-                            ]),
-                        child: Container(
-                          child: Row(
-                            children: [
-                              Column(
+                : provider.cartItems.length == 0
+                    ? NoItemsInCart()
+                    : ListView.separated(
+                        separatorBuilder: (context, index) => Divider(),
+                        shrinkWrap: true,
+                        physics: ScrollPhysics(),
+                        itemCount: provider.cartItems.length,
+                        itemBuilder: ((context, index) {
+                          return Slidable(
+                            key: UniqueKey(),
+                            startActionPane: ActionPane(
+                                dismissible: DismissiblePane(
+                                  onDismissed: () {
+                                    deleteCartItem(
+                                        provider.cartItems[index].productId.id,
+                                        provider.cartItems[index].quantity,
+                                        context);
+                                  },
+                                ),
+                                motion: const DrawerMotion(),
                                 children: [
-                                  Container(
-                                    width: 150,
-                                    child: Image.network(provider
-                                        .cartItems[index].productId.image),
+                                  SlidableAction(
+                                    label: "Delete",
+                                    icon: Icons.delete,
+                                    backgroundColor: Colors.red,
+                                    onPressed: (ctx) {
+                                      deleteCartItem(
+                                          provider
+                                              .cartItems[index].productId.id,
+                                          provider.cartItems[index].quantity,
+                                          context);
+                                    },
                                   ),
-                                  Row(
+                                  // SlidableAction(
+                                  //   label: "Share",
+                                  //   icon: Icons.share,
+                                  //   backgroundColor: Colors.blue,
+                                  //   onPressed: (context) {},
+                                  // )
+                                ]),
+                            child: Container(
+                              child: Row(
+                                children: [
+                                  Column(
                                     children: [
                                       Container(
-                                        width: 50,
-                                        child: OutlinedButton(
-                                          onPressed: () {},
-                                          child: provider.cartItems[index]
-                                                      .quantity <=
-                                                  1
-                                              ? GestureDetector(
-                                                  onTap: () {
-                                                    deleteCartItem(
-                                                        provider
-                                                            .cartItems[index]
-                                                            .productId
-                                                            .id,
-                                                        provider
-                                                            .cartItems[index]
-                                                            .quantity,
-                                                        context);
-                                                  },
-                                                  child: Container(
-                                                    child: Icon(
-                                                      Icons.delete,
-                                                      size: 20,
-                                                    ),
-                                                  ),
-                                                )
-                                              : GestureDetector(
-                                                  onTap: () {
-                                                    print("Iconbutton called");
-                                                    decreaseCartItem(
-                                                        provider
-                                                            .cartItems[index]
-                                                            .productId
-                                                            .id,
-                                                        provider
-                                                            .cartItems[index]
-                                                            .quantity,
-                                                        context);
-                                                  },
-                                                  child: Icon(
-                                                    Icons.remove,
-                                                    size: 20,
-                                                  ),
-                                                ),
-                                        ),
+                                        width: 150,
+                                        child: Image.network(provider
+                                            .cartItems[index].productId.image),
                                       ),
-                                      SizedBox(
-                                        width: 10,
+                                      Row(
+                                        children: [
+                                          Container(
+                                            width: 50,
+                                            child: OutlinedButton(
+                                              onPressed: () {},
+                                              child: provider.cartItems[index]
+                                                          .quantity <=
+                                                      1
+                                                  ? GestureDetector(
+                                                      onTap: () {
+                                                        deleteCartItem(
+                                                            provider
+                                                                .cartItems[
+                                                                    index]
+                                                                .productId
+                                                                .id,
+                                                            provider
+                                                                .cartItems[
+                                                                    index]
+                                                                .quantity,
+                                                            context);
+                                                      },
+                                                      child: Container(
+                                                        child: Icon(
+                                                          Icons.delete,
+                                                          size: 20,
+                                                        ),
+                                                      ),
+                                                    )
+                                                  : GestureDetector(
+                                                      onTap: () {
+                                                        print(
+                                                            "Iconbutton called");
+                                                        decreaseCartItem(
+                                                            provider
+                                                                .cartItems[
+                                                                    index]
+                                                                .productId
+                                                                .id,
+                                                            provider
+                                                                .cartItems[
+                                                                    index]
+                                                                .quantity,
+                                                            context);
+                                                      },
+                                                      child: Icon(
+                                                        Icons.remove,
+                                                        size: 20,
+                                                      ),
+                                                    ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                              "${provider.cartItems[index].quantity}"),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Container(
+                                            width: 50,
+                                            child: OutlinedButton(
+                                              onPressed: () {
+                                                print("Pressed");
+                                                increaseCartItem(
+                                                    provider.cartItems[index]
+                                                        .productId.id,
+                                                    provider.cartItems[index]
+                                                        .quantity,
+                                                    context);
+                                              },
+                                              child: Icon(
+                                                Icons.add,
+                                                size: 20,
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        width: 240,
+                                        child: Text(
+                                          "${provider.cartItems[index].productId.name}",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 20),
+                                        ),
                                       ),
                                       Text(
-                                          "${provider.cartItems[index].quantity}"),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Container(
-                                        width: 50,
-                                        child: OutlinedButton(
-                                          onPressed: () {
-                                            print("Pressed");
-                                            increaseCartItem(
-                                                provider.cartItems[index]
-                                                    .productId.id,
-                                                provider
-                                                    .cartItems[index].quantity,
-                                                context);
-                                          },
-                                          child: Icon(
-                                            Icons.add,
-                                            size: 20,
-                                          ),
-                                        ),
-                                      )
+                                          "₹ ${formatter.format(provider.cartItems[index].productId.discountedPrice)}"),
+                                      Text(provider.cartItems[index].productId
+                                              .inStock
+                                          ? "In Stock"
+                                          : "Out of stock"),
                                     ],
                                   )
                                 ],
                               ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    width: 240,
-                                    child: Text(
-                                      "${provider.cartItems[index].productId.name}",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 20),
-                                    ),
-                                  ),
-                                  Text(
-                                      "₹ ${formatter.format(provider.cartItems[index].productId.discountedPrice)}"),
-                                  Text(provider
-                                          .cartItems[index].productId.inStock
-                                      ? "In Stock"
-                                      : "Out of stock"),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      );
-                    }))
+                            ),
+                          );
+                        }))
             // : Text("No Items in Cart")
           ],
         ),
